@@ -179,8 +179,10 @@
 			label.addEventListener('mouseenter', () => {
 				if (toggle_check) {
 					if (checkbox.checked == false) {
-						checkbox.checked = true
-						checkbox_activated(title, time, checkbox.checked);
+						if (checkbox.disabled == false) {
+							checkbox.checked = true
+							checkbox_activated(title, time, checkbox.checked);
+						}
 					}
 				}
 				if (toggle_disable) {
@@ -247,16 +249,26 @@
 
 					work_lengths.push(time);
 					document.getElementById(label_id).style.color = "black"
+					document.getElementById(title).disabled = false;
 				}
 
 			} else if (!bool){	
 				console.log("disabling" + " " + title);
 				let index = work_lengths.indexOf(time)
 				work_lengths.splice(index, 1);
-				// shitty dictionary workaround, there are probably dictionaries in js, but oh well
+
 				disabled_works.push(time);
 				disabled_works_titles.push(title);
 
+				if (document.getElementById(title).checked == true) {
+			    		document.getElementById(title).checked = false;
+					checkbox_activated(title, time, false);
+			    		
+
+				}
+
+			    	document.getElementById(title).disabled = true;
+			    	
 				document.getElementById(label_id).style.color = "red"
 			}
 
