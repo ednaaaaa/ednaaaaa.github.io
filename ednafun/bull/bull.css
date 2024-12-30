@@ -1,0 +1,67 @@
+body {
+
+	background: #111214;
+
+}
+
+p {
+
+	color: crimson;
+
+	text-align: center;
+}
+
+
+
+#progress {
+
+	width: 100%;
+	background-color: red;
+
+
+}
+
+#bar {
+
+
+	width: 0%;
+	height: 50px;
+	background-color: darkblue;
+}
+
+h1 {
+
+	text-align: center;
+
+	color: #44BBFF;
+}
+
+.progressbar_text {
+
+
+
+}
+
+.progressbar_text p {
+
+	color: white;
+
+}
+
+.checkbox_holder {
+
+	display: flex;
+
+	gap: 24px;
+
+	flex-wrap: wrap;
+}
+
+
+.checkbox_section {
+
+	background-color: gray;
+
+}
+
+

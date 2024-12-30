@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="bull.css">
+	</head>
+
+	<body>
+
+		<h1> <b> <i> THE BULL OF HEAVEN CHECKLIST </b> </i> </h1>
+
+		<p> here is a checklist for every single bull of heaven release, with a handy progress bar to track how much you have listened to. </p>
+
+		<p> Z and X can be used to held down to mass check and uncheck, and A and S can be used to remove certain pieces from the overall hour count. clicking on an era title with these held down will apply that key to all of that era's pieces. </p>
+
+		<p> "unlistenable releases" or anything longer than 209 are not included on this list for obvious reasons, so for those you'll have to do your own math. sorry. </p>
+
+		<p> all info sourced from rym, with ~rippleswitch's "☆ THE BULL OF HEAVEN BINGE ☆" list acting as my general reference for sorting. have fun! made by ~ednaaaaa</p>
+
+	</body>
+
+
+	<div id="progress">
+		<div id="bar"> </div>
+	</div>
+
+	<div class="progressbar_text" id="dbartext">
+		<div id="bartext">
+		<h2> <b> 00.00% </b> </h2> 
+		</div>
+
+		<div id="hourtext">
+			<p> THAT'S <b> 0 HOURS </b> OUT OF <b> 0 HOURS </b> </p>
+
+		</div>
+
+		<div id="counttext">
+			<p> <b> 0 </b> out of <b> 0 </b> </p>
+
+		</div>
+	</div>
+
+	<div class="checkbox_holder"> 
+
+		<div class="checkbox_section" id="ERAONE">
+	
+			<h1 id="ERAONETITLE"> ERA 1 (001-100) </h1>
+		</div>
+		<div class="checkbox_section" id="ERATWO">
+	
+			<h1 id="ERATWOTITLE"> ROMAN NUMERALS (I-C) </h1>
+		</div>
+		<div class="checkbox_section" id="ERATHREE">
+	
+			<h1 id="ERATHREETITLE"> ERA 3 (101-200) </h1>
+		</div>
+		<div class="checkbox_section" id="ERAFOUR">
+	
+			<h1 id="ERAFOURTITLE"> ERA 4 (201-300) </h1>
+		</div>
+		<div class="checkbox_section" id="ERAFIVE">
+	
+			<h1 id="ERAFIVETITLE"> ERA 5 (301-353) </h1>
+		</div>
+		<div class="checkbox_section" id="ERASIX">
+	
+			<h1 id="ERASIXTITLE"> NU-BOH </h1>
+		</div>
+		<div class="checkbox_section" id="ERASEVEN">
+	
+			<h1 id="ERASEVENTITLE"> MISC </h1>
+		</div>
+	</div>
+
+	<script>
+
+		var sort_count = 1;
+
+		var total_time = 0;
+		var max_time = 0;
+
+		const works = [];
+
+		var work_lengths = [];
+
+		var disabled_works = [];
+		var disabled_works_titles = [];
+
+		var toggle_check = false;
+		var toggle_disable = false;
+		var toggle_uncheck = false;
+		var toggle_enable = false;
+
+		var count_text = 0;	
+
+		document.addEventListener("keydown", keysdown);
+		document.addEventListener("keyup", keysup);
+
+
+		function keysdown(event) {
+			if (event.key == "z") {
+				toggle_check = true;
+			}
+			else if (event.key == "a") {
+				toggle_disable = true;
+			}
+			else if (event.key == "x") {
+				toggle_uncheck = true;
+			}
+			else if (event.key == "s") {
+				toggle_enable = true;
+			}
+
+		}
+
+		function keysup(event) {
+			
+			if (event.key == "z") {
+				toggle_check = false;
+			}
+			else if (event.key == "a") {
+				toggle_disable = false;
+			}
+			else if (event.key == "x") {
+				toggle_uncheck = false;
+			}
+			else if (event.key == "s") {
+				toggle_enable = false;
+			}
+
+		}
+
+		fetch("bull.txt")
+			.then((res) => res.text())
+			.then((text) => {
+
+				let items = []
+
+				text.split('\n').forEach(line => {
+					items.push(line);
+				});
+
+				let filtered = items.filter(function (el) {
+					return el != '';
+				});
+
+				filtered.forEach((item) => {
+
+					add_checkbox(item);
+					sort_count++;
+				})
+
+				set_time();
+			})
+			.catch((e) => console.error(e));
+
+		function add_checkbox(work) {
+			let new_work = work.split("\"");
+
+			let title = new_work[1];
+			
+			let time = new_work[3];
+			work_lengths.push(time);
+
+
+			let checkbox = document.createElement('input');
+			checkbox.type = "checkbox";
+			checkbox.id = title;
+			checkbox.name = title;
+			checkbox.value = time;
+			checkbox.addEventListener('click', () => {
+				checkbox_activated(title, time, checkbox.checked);
+			});
+			
+			let label = document.createElement('label');
+			label.htmlFor = "1";
+
+			label.id = title + "_label";
+			label.appendChild(document.createTextNode(title));
+			label.addEventListener('mouseenter', () => {
+				if (toggle_check) {
+					if (checkbox.checked == false) {
+						checkbox.checked = true
+						checkbox_activated(title, time, checkbox.checked);
+					}
+				}
+				if (toggle_disable) {
+					toggle_work(title, time, label.id, false);
+				}
+				if (toggle_uncheck) {
+					if (checkbox.checked == true) {
+						checkbox.checked = false;
+						checkbox_activated(title, time, checkbox.checked);
+					}
+				}
+				if (toggle_enable) {
+					toggle_work(title, time, label.id, true);
+				}
+
+			});
+				
+			var div = document.getElementById("ERAONE");
+
+			console.log(sort_count);	
+			if (sort_count <= 100) {
+
+			}
+			else if (sort_count <= 200) {
+				div = document.getElementById("ERATWO");
+
+			}
+			else if (sort_count <= 299) {
+				div = document.getElementById("ERATHREE");
+
+			}
+			else if (sort_count <= 350) {
+				div = document.getElementById("ERAFOUR");
+
+			}
+			else if (sort_count <= 396) {
+				div = document.getElementById("ERAFIVE");
+
+			}
+			else if (sort_count <= 443) {
+				div = document.getElementById("ERASIX");
+
+			}
+			else if (sort_count <= 500) {
+				div = document.getElementById("ERASEVEN");
+
+			}
+			div.appendChild(checkbox);
+			div.appendChild(label);
+			div.appendChild(document.createElement("br"));
+
+		};
+
+
+		function toggle_work(title, time, label_id, bool) {
+			console.log(title);
+
+			var find = disabled_works_titles.indexOf(title);
+			if (find != -1) {
+				if (bool) {
+					console.log("enabling" + " " + title);
+					disabled_works_titles.splice(find, 1);
+					disabled_works.splice(find, 1);
+
+					work_lengths.push(time);
+					document.getElementById(label_id).style.color = "black"
+				}
+
+			} else if (!bool){	
+				console.log("disabling" + " " + title);
+				let index = work_lengths.indexOf(time)
+				work_lengths.splice(index, 1);
+				// shitty dictionary workaround, there are probably dictionaries in js, but oh well
+				disabled_works.push(time);
+				disabled_works_titles.push(title);
+
+				document.getElementById(label_id).style.color = "red"
+			}
+
+			set_time();
+
+			update_bar();
+			
+			
+		}
+
+		function set_time() {
+
+			max_time = 0;
+
+			let i = 0;
+
+			
+
+			while (i < work_lengths.length) {
+
+				let len = convert_time(work_lengths[i]);
+				max_time = max_time + len
+
+				console.log(work_lengths[i]);
+				i++;
+			}
+
+			console.log("TIME =" + " " + max_time);
+		}
+
+		function checkbox_activated(id, time, check_bool) {
+			console.log(time);
+
+
+			var checkbox = document.getElementById(id);
+
+			var seconds = convert_time(time);
+			
+
+			if (checkbox.checked == true){
+
+				total_time += seconds;
+				count_text += 1;
+
+			}
+
+			else {
+
+				total_time -= seconds;
+				count_text -= 1;
+			}
+
+			update_bar();
+
+		};
+
+		function update_bar() {
+			var percentage = (max_time - total_time) / (max_time) * 100;
+			percentage = -(percentage - 100)
+
+			let current_hours = (total_time / 60) / 60
+			let remaining_hours = (max_time / 60) / 60
+
+			document.getElementById("counttext").innerHTML = "<p> <b>" + count_text + "</b> out of <b>" + work_lengths.length + "</b> </p>"
+
+			if (total_time == 0) {
+				var bar = document.getElementById("bar");
+				bar.style.width = 0 + "%";
+				document.getElementById("hourtext").innerHTML = "<p> THAT'S <b>" + current_hours + " HOURS </b> OUT OF <b>" + remaining_hours + " HOURS </b> </p>";
+				document.getElementById("bartext").innerHTML = "<p> <b>" + "0.00" + "% </b> </p>";
+
+
+			}
+			
+			else if (total_time == max_time) {
+				var bar = document.getElementById("bar");
+				bar.style.width = 100 + "%";
+				document.getElementById("bartext").innerHTML = "<p> <b>" + "100" + "% </b> </p>";
+				document.getElementById("hourtext").innerHTML = "<p> THAT'S <b>" + current_hours + " HOURS </b> OUT OF <b>" + remaining_hours + " HOURS </b> </p>";
+
+
+			}
+
+			else {
+
+				
+
+
+				var bar = document.getElementById("bar");
+				bar.style.width = percentage + "%";
+				document.getElementById("bartext").innerHTML = "<p> <b>" + percentage + "% </b> </p>";
+				document.getElementById("hourtext").innerHTML = "<p> THAT'S <b>" + current_hours + " HOURS </b> OUT OF <b>" + remaining_hours + " HOURS </b> </p>";
+				
+			}
+		};
+
+
+
+
+		function convert_time(time) {
+
+			var new_time = [minutes, seconds] = time.split(':');
+
+			var totalSeconds = (Number(new_time[0])) * 60 + (Number(new_time[1]));
+			return totalSeconds;
+
+		};
+
+		update_bar();
+
+		// there is almost certainly a better way to do this
+		// !!!
+		document.getElementById("ERAONETITLE").addEventListener("click", era_click_eraone);
+		document.getElementById("ERATWOTITLE").addEventListener("click", era_click_eratwo);
+		document.getElementById("ERATHREETITLE").addEventListener("click", era_click_erathree);
+		document.getElementById("ERAFOURTITLE").addEventListener("click", era_click_erafour);
+		document.getElementById("ERAFIVETITLE").addEventListener("click", era_click_erafive);
+		document.getElementById("ERASIXTITLE").addEventListener("click", era_click_erasix);
+		document.getElementById("ERASEVENTITLE").addEventListener("click", era_click_eraseven);
+
+		var eraone = document.getElementById("ERAONE")
+		var eratwo = document.getElementById("ERATWO")
+		var erathree = document.getElementById("ERATHREE")
+		var erafour = document.getElementById("ERAFOUR")
+		var erafive = document.getElementById("ERAFIVE")
+		var erasix = document.getElementById("ERASIX")
+		var eraseven = document.getElementById("ERASEVEN")
+
+		function era_click_eraone() {
+			console.log("hi");
+			if (toggle_check) {
+				for (const child of eraone.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of eraone.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of eraone.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of eraone.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+
+		function era_click_eratwo() {
+			if (toggle_check) {
+				for (const child of eratwo.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of eratwo.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of eratwo.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of eratwo.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+
+		function era_click_erathree() {
+			if (toggle_check) {
+				for (const child of erathree.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of erathree.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of erathree.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of erathree.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+		function era_click_erafour() {
+			if (toggle_check) {
+				for (const child of erafour.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of erafour.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of erafour.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of erafour.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+		function era_click_erafive() {
+			if (toggle_check) {
+				for (const child of erafive.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of erafive.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of erafive.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of erafive.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+		function era_click_erasix() {
+			if (toggle_check) {
+				for (const child of erasix.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of erasix.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of erasix.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of erasix.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+		function era_click_eraseven() {
+			if (toggle_check) {
+				for (const child of eraseven.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == false) {
+							child.checked = true;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_disable) {
+				for (const child of eraseven.children) {
+					if (child.tagName == "LABEL") {
+
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, false);
+
+					}
+				}
+			}
+			else if (toggle_uncheck) {
+				for (const child of eraseven.children) {
+					if (child.tagName == "INPUT") {
+						if (child.checked == true) {
+							child.checked = false;
+							checkbox_activated(child.id, child.value, child.checked);
+						}
+
+					}
+				}
+			}
+			else if (toggle_enable) {
+				for (const child of eraseven.children) {
+					if (child.tagName == "LABEL") {
+						toggle_work((document.getElementById((child.id).replace("_label", ""))).id, (document.getElementById((child.id).replace("_label", ""))).value, child.id, true);
+
+					}
+				}
+			}
+
+		}
+	</script>
+</html>
