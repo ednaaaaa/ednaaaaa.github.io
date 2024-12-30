@@ -175,7 +175,9 @@
 			label.htmlFor = "1";
 
 			label.id = title + "_label";
+			label.title = time;
 			label.appendChild(document.createTextNode(title));
+			
 			label.addEventListener('mouseenter', () => {
 				if (toggle_check) {
 					if (checkbox.checked == false) {
