@@ -12,7 +12,7 @@
 
 		<p> here is a checklist for every single bull of heaven release, with a handy progress bar to track how much you have listened to. </p>
 
-		<p> hold down Z and X and drag to mass check and uncheck, and A and S can be used to remove specific pieces from the overall hour count. clicking on an era title with these held down will apply that key to all of that era's pieces. </p>
+		<p> Z and X can be used to held down to mass check and uncheck, and A and S can be used to remove certain pieces from the overall hour count. clicking on an era title with these held down will apply that key to all of that era's pieces. </p>
 
 		<p> "unlistenable releases" or anything longer than 209 are not included on this list for obvious reasons, so for those you'll have to do your own math. sorry. <a href="bull.txt"> txt database </a></p>
 
@@ -401,19 +401,18 @@
 		var erasix = document.getElementById("ERASIX")
 		var eraseven = document.getElementById("ERASEVEN")
 
-		function era_click_eraone() {
-			console.log("hi");
+		    function era_click_eraone() {
 			if (toggle_check) {
 				for (const child of eraone.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
-						}
 
+						}
 					}
 				}
-			}
+			    }
 			else if (toggle_disable) {
 				for (const child of eraone.children) {
 					if (child.tagName == "LABEL") {
@@ -448,7 +447,7 @@
 			if (toggle_check) {
 				for (const child of eratwo.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
 						}
@@ -490,14 +489,16 @@
 			if (toggle_check) {
 				for (const child of erathree.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
+						}
 						}
 
 					}
 				}
-			}
+			    
+			
 			else if (toggle_disable) {
 				for (const child of erathree.children) {
 					if (child.tagName == "LABEL") {
@@ -531,7 +532,7 @@
 			if (toggle_check) {
 				for (const child of erafour.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
 						}
@@ -572,7 +573,7 @@
 			if (toggle_check) {
 				for (const child of erafive.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
 						}
@@ -613,7 +614,7 @@
 			if (toggle_check) {
 				for (const child of erasix.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
 						}
@@ -654,7 +655,7 @@
 			if (toggle_check) {
 				for (const child of eraseven.children) {
 					if (child.tagName == "INPUT") {
-						if (child.checked == false) {
+						if (child.checked == false && child.disabled == false) {
 							child.checked = true;
 							checkbox_activated(child.id, child.value, child.checked);
 						}
